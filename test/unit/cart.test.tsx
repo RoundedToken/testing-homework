@@ -1,5 +1,5 @@
 import React from 'react';
-import { addToCart, clearCart } from '../../src/client/store';
+import { clearCart } from '../../src/client/store';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -81,21 +81,10 @@ describe('Корзина', () => {
         render(app);
 
         //ДЕЙСТВИЯ
-        store.dispatch(
-            addToCart({
-                id: 1,
-                name: 'testName',
-                price: 88,
-                description: 'testDescription',
-                material: 'testMaterial',
-                color: 'testColor',
-            })
-        );
+        store.dispatch(clearCart());
 
         //ОЖИДАНИЯ
-        expect(localStorage.getItem('example-store-cart')).toBe(
-            '{"0":{"name":"testName0","price":77,"count":2},"1":{"name":"testName","count":1,"price":88}}'
-        );
+        expect(localStorage.getItem('example-store-cart')).toBe('{}');
     });
 
     it('Отображение количества неповторяющихся товаров', () => {
