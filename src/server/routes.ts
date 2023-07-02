@@ -5,13 +5,18 @@ import { CheckoutResponse } from '../common/types';
 import { ExampleStore } from './data';
 
 export function getBugId(req: express.Request) {
-    return Number(req.query.bug_id) || 0;
+    return Number(req.query.bug_id) || Number(process.env.BUG_ID) || 0;
 }
 
-const indexHtmlContent = readFileSync(join(__dirname, '..', '..', "dist", "index.html")).toString();
+const indexHtmlContent = readFileSync(join(__dirname, '..', '..', 'dist', 'index.html')).toString();
 
 const indexHtml = (req: express.Request, res: express.Response) => {
-    res.send(indexHtmlContent.replace('</head>', `<script>var process={env:{BUG_ID:'${getBugId(req)}'}}</script></head>`) );
+    res.send(
+        indexHtmlContent.replace(
+            '</head>',
+            `<script>var process={env:{BUG_ID:'${getBugId(req)}'}}</script></head>`
+        )
+    );
 };
 
 const store = new ExampleStore();
@@ -35,7 +40,7 @@ router.get('/api/products/:id(\\d+)', (req, res) => {
 
     let id = Number(req.params.id);
 
-    if(bugId === 3) {
+    if (bugId === 3) {
         id = 0;
     }
 
